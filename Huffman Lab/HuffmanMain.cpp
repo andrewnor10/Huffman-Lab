@@ -15,7 +15,7 @@ using namespace std;
 int main() {
 
 	// example code for priority_queue....play with it and then remove/comment out
-	cout << "priority_queue test area: \n";
+	/*cout << "priority_queue test area: \n";
 	priority_queue<int, vector<int>, greater<int> > pq;
 
 	pq.push(111);
@@ -34,6 +34,7 @@ int main() {
 		pq.pop();
 	}
 	cout << endl << endl;
+	*/
 
 	// example code for unordered_map....play with it and then remove/comment out
 	//  an unordered_map can be used to store the char and its encoded 

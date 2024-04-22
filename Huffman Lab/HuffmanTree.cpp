@@ -65,12 +65,24 @@ void HuffmanTree::makeEmpty(BinaryNode *& t) {
 
 void HuffmanTree::printTree(BinaryNode *node, std::ostream & out) const 
 {
-	// need to write code
+
+	if (node != nullptr)
+	{
+		printTree(node->left, out); // Left branch
+		out << "Element: " << node->element << ' ' << "Frequency: " << node->frequency << endl; // Output
+		printTree(node->right, out); // Right branch
+	}
+
 }
 
 void HuffmanTree::printCodes(BinaryNode *node, std::ostream & out, string code) const 
 {	
-	// need to write code
+	if (node != nullptr)
+	{
+		printCodes(node->left, out, code + "0"); // Left branch
+		out << "Element: " << node->element << ' ' << "Code: " << code << endl;
+		printCodes(node->right, out, code + "1"); // Right branch
+	}
 }
 
 
@@ -125,14 +137,34 @@ HuffmanTree::BinaryNode * HuffmanTree::buildTree(string frequencyText) {
 			temp.pop_back();
 		}
 	}
-	for (!nodes.empty())
+	while (nodes.size() != 1)
 	{
-		string empty;
-		empty += nodes.top()->element << ',';
+		BinaryNode* Internal; 
+		BinaryNode* left;
+		BinaryNode* right;
+		int freqSum;
+		string elemSum;
+
+		// Pull lowest 2 frequencies out
+		left = nodes.top();
 		nodes.pop();
-		empty += nodes.top() 
-		new BinaryNode()
+
+		right = nodes.top();
+		nodes.pop();
+		
+		// Combine their data into a new node
+		freqSum = left->frequency + right->frequency;
+		elemSum = left->element + ',' +  right->element;
+		Internal = new BinaryNode(elemSum, freqSum);
+		
+		// Assign new nodes pointers to them
+		Internal->left = left;
+		Internal->right = right;
+
+		// Push node back into queue
+		nodes.push(Internal);
 	}
+	root = nodes.top();
 	return nodes.top();
 }
 
@@ -161,15 +193,15 @@ HuffmanTree::~HuffmanTree()
 // print out the char and its encoding
 void HuffmanTree::printCodes(std::ostream & out) const 
 { 	
-	// need to write code
-	// calls recursive function
+	string code;
+	printCodes(root, out, code);
 }
 
 // prints out the char and frequency
 void HuffmanTree::printTree(std::ostream & out) const 
 {	
 	// need to write code
-	// calls recursive function
+	printTree(root, out);
 }
 
 void HuffmanTree::makeEmpty() 
@@ -194,6 +226,7 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 
 	// need to write code
 	
+
 	return encoded;
 }
 
