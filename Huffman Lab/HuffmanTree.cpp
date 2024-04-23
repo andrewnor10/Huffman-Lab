@@ -54,7 +54,31 @@ string HuffmanTree::getCode(char letter) const
 {	
 	string code = "";
 
-	// need to write code
+	BinaryNode* current = root;
+	while (current != nullptr)
+	{
+		if (current ->element.size() == 1)
+		{
+			if (current->element[0] == letter)
+			{
+				return code;
+			}
+		}
+		else
+		{
+			if (current->left->element.find(letter) != string::npos)
+			{
+				code += "0";
+				current = current->left;
+			}
+			else
+			{
+				code += "1";
+				current = current->right;
+			}
+		}
+	}
+
 	
 	return code;
 }
@@ -89,6 +113,8 @@ void HuffmanTree::printCodes(BinaryNode *node, std::ostream & out, string code) 
 void HuffmanTree::saveTree(BinaryNode * current, string code) 
 {	
 	// need to write code
+	// save to file
+
 }
 
 // writes tree information to file so the tree can be rebuilt when unzipping
@@ -96,6 +122,7 @@ void HuffmanTree::saveTree(std::ostream & compressedFileStream)
 {
 	// need to write code
 	// calls recursive function
+	saveTree(root, string());
 }
 
 
