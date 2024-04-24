@@ -39,7 +39,7 @@ int main() {
 	// example code for unordered_map....play with it and then remove/comment out
 	//  an unordered_map can be used to store the char and its encoded 
 	//  values after you have built the tree
-	cout << "unordered_map test area: \n";
+	/*cout << "unordered_map test area: \n";
 	unordered_map<char, string> exampleMap;
 	exampleMap['a'] = "apple";			// creates a new entry if 'a' is not in the map and associates "apple" with 'a'
 	exampleMap['b'] = "ballon";
@@ -54,7 +54,7 @@ int main() {
 	}
 	cout << "Number of items stored in map: " << exampleMap.size();
 	cout << endl << endl;
-
+	*/
 
 	// SUGGESTION: write and test the functions in the order called below
 	//         (some of the functions may need to call other private functions)
@@ -75,15 +75,15 @@ int main() {
 	cout << "Code D :" << tree.getCode('D') << endl;
 
 
-	//Test 2
-	//cout << "\n\nTest 2\n";
-	//vector<char> encoded = tree.encode("HELP"); 
-	//tree.printCodes();
+	
+	cout << "\n\nTest 2\n";
+	vector<char> encoded = tree.encode("HELP"); 
+	tree.printCodes();
 	//  don't call for lab:  tree.printBinary(encoded);  // for lab, instead output chars inside encoded
-	//cout << endl;
+	cout << endl;
 	//
-	//cout << tree.decode(encoded) << ":" << endl;
-	//system("pause");  // LAB 3: Should run up to here with the above functions working with chars '1' and '0' 
+	cout << tree.decode(encoded) << ":" << endl;
+	system("pause");  // LAB 3: Should run up to here with the above functions working with chars '1' and '0' 
 						//			instead of making the changes at the binary level
 
 	//Test 3
