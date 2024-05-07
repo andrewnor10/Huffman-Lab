@@ -54,7 +54,6 @@ string HuffmanTree::getCode(char letter) const
 {
 	string code = "";
 
-
 	code = codeLookup.at(letter);
 
 	return code;
@@ -288,22 +287,17 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 	stringToEncode.push_back(EOFCharacter); // needed when encoding message for file I/O
 	saveTree(root, string());
 	vector<char> encoded;
-	char temp;
+	char code;
 	string str;
-	for (int i = 0; i < stringToEncode.size() - 1; i++)
-	{
-		temp = stringToEncode[i];
-		str = getCode(temp);
-		for (int j = 0; j < str.size(); j++)
-		{
-			encoded.push_back(str[j]);
-		}
-	}
-	for (char ele : encoded)
-	{
-		cout << ele;
-	}
+	char byte = 0;
+	int codeCounter;
+	int bitCounter;
+	for (int letter = 0; letter < stringToEncode.size() - 1; letter++)
+	{	
+		code = stringToEncode[letter];
+		str = getCode(code);
 
+	}
 	cout << endl;
 	return encoded;
 }
