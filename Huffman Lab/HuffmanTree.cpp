@@ -260,25 +260,39 @@ void HuffmanTree::makeEmpty()
 
 string HuffmanTree::decode(vector<char> encodedBytes) {
 	string decoded;
+	char byte = 0;
 
+	vector<char> codes;
 	BinaryNode* current = root;
-	// need to write code
+
 	for (int i = 0; i < encodedBytes.size(); i++)
 	{
-		if (current->element.size() == 1)
+		current = root;
+		byte = encodedBytes.at(i);
+		printBits(encodedBytes[i]);
+		for (int bitCount = 0; bitCount < 8 && current != nullptr; bitCount++)
 		{
-			decoded += current->element;
+			if (encodedBytes.at(i) == EOFCharacter)
+				{
+				return decoded;
+				}
+			if (current->element.size() == 1)
+			{
+				decoded += current->element;
+				current = root;
+			}
+			if (getBit(byte, bitCount) == 0)
+			{
+				current = current->left;
+			}
+			else if (getBit(byte, bitCount) == 1)
+			{
+				current = current->right;
+			}
 		}
-		if (encodedBytes[i] == 0)
-		{
-			current = current->left;
-		}
-		else if (encodedBytes[i] == 1)
-		{
-			current = current->right;
-		}
-	}
 
+		
+	}
 	return decoded;
 }
 
@@ -318,7 +332,11 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 		
 	
 	}
-
+	if (bitCounter != 0)
+	{
+		encoded.push_back(byte);
+	}
+	encoded.push_back(EOFCharacter);
 	cout << endl;
 	return encoded;
 }
