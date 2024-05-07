@@ -33,7 +33,7 @@ private:
 		}
 	};	// end of BinaryNode class
 
-	struct compareBinaryNodes : public binary_function<BinaryNode*, BinaryNode*,bool>
+	struct compareBinaryNodes
 	{
 		bool operator() (const BinaryNode* p1, const BinaryNode* p2)
 		{

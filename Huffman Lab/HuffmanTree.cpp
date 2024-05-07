@@ -289,20 +289,37 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 	saveTree(root, string());
 	vector<char> encoded;
 	char temp;
-	string str;
+	string code;
+	int bitCounter = 0;
+	char byte = 0;
+
 	for (int i = 0; i < stringToEncode.size() - 1; i++)
 	{
+	
 		temp = stringToEncode[i];
-		str = getCode(temp);
-		for (int j = 0; j < str.size(); j++)
+		code = getCode(temp);
+		cout << temp << endl;
+		for (int j = 0; j < code.size(); j++)
 		{
-			encoded.push_back(str[j]);
+			if (code[j] == '1')
+			{
+				byte = setBit(byte, bitCounter);
+			}
+			bitCounter++;
+			if (bitCounter == 8)
+			{
+				encoded.push_back(byte);
+				printBits(byte, cout);
+				
+				bitCounter = 0;
+				byte = 0;
+				
+			}
 		}
+		
+	
 	}
-	for (char ele : encoded)
-	{
-		cout << ele;
-	}
+
 
 	cout << endl;
 	return encoded;
