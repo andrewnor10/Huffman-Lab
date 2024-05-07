@@ -287,17 +287,38 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 	stringToEncode.push_back(EOFCharacter); // needed when encoding message for file I/O
 	saveTree(root, string());
 	vector<char> encoded;
-	char code;
-	string str;
+	char temp;
+	string code;
+	int bitCounter = 0;
 	char byte = 0;
-	int codeCounter;
-	int bitCounter;
-	for (int letter = 0; letter < stringToEncode.size() - 1; letter++)
-	{	
-		code = stringToEncode[letter];
-		str = getCode(code);
 
+	for (int i = 0; i < stringToEncode.size() - 1; i++)
+	{
+	
+		temp = stringToEncode[i];
+		code = getCode(temp);
+		cout << temp << endl;
+		for (int j = 0; j < code.size(); j++)
+		{
+			if (code[j] == '1')
+			{
+				byte = setBit(byte, bitCounter);
+			}
+			bitCounter++;
+			if (bitCounter == 8)
+			{
+				encoded.push_back(byte);
+				printBits(byte, cout);
+				
+				bitCounter = 0;
+				byte = 0;
+				
+			}
+		}
+		
+	
 	}
+
 	cout << endl;
 	return encoded;
 }
