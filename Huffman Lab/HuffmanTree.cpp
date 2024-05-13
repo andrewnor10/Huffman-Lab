@@ -264,18 +264,15 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 
 	vector<char> codes;
 	BinaryNode* current = root;
-
+	printBinary(encodedBytes);
 	for (int i = 0; i < encodedBytes.size(); i++)
 	{
 		current = root;
 		byte = encodedBytes.at(i);
 		printBits(encodedBytes[i]);
-		for (int bitCount = 0; bitCount < 8 && current != nullptr; bitCount++)
+		for (int bitCount = 0; bitCount <= 8 && current != nullptr; bitCount++)
 		{
-			if (encodedBytes.at(i) == EOFCharacter)
-				{
-				return decoded;
-				}
+
 			if (current->element.size() == 1)
 			{
 				decoded += current->element;
@@ -293,6 +290,8 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 
 		
 	}
+	cout << endl;
+	printBinary(encodedBytes);
 	return decoded;
 }
 
@@ -312,9 +311,9 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 		temp = stringToEncode[i];
 		code = getCode(temp);
 		cout << temp << endl;
-		for (int j = 0; j < code.size(); j++)
+		for (int codePos = 0; codePos < code.size(); codePos++)
 		{
-			if (code[j] == '1')
+			if (code[codePos] == '1')
 			{
 				byte = setBit(byte, bitCounter);
 			}
@@ -336,7 +335,6 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 	{
 		encoded.push_back(byte);
 	}
-	encoded.push_back(EOFCharacter);
 	cout << endl;
 	return encoded;
 }
@@ -355,6 +353,12 @@ void HuffmanTree::compressFile(string compressToFileName,
 
 	// NOTE: when opening the compressedFile, you need to open in 
 	//  binary mode for writing..hmmm..why is that?
+	ofstream ostrm("compressToFileName.bin",std::ios::binary);
+
+
+
+
+
 }
 
 
