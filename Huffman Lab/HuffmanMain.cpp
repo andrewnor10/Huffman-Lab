@@ -79,7 +79,7 @@ int main() {
 	cout << "\n\nTest 2\n";
 	vector<char> encoded = tree.encode("HELP"); 
 	tree.printCodes();
-	//  don't call for lab:  tree.printBinary(encoded);  // for lab, instead output chars inside encoded
+	 tree.printBinary(encoded);  // for lab, instead output chars inside encoded
 	cout << endl;
 	//
 	cout << tree.decode(encoded) << ":" << endl;
@@ -87,17 +87,17 @@ int main() {
 						//			instead of making the changes at the binary level
 
 	//Test 3
-	//cout << "\n\nTest 3\n";
-	//std::ifstream frequencyStream("Bigo.txt");
-	//HuffmanTree tree2(frequencyStream);
-	//tree2.printTree();
-	//tree2.printCodes();
+	cout << "\n\nTest 3\n";
+	std::ifstream frequencyStream("Bigo.txt");
+	HuffmanTree tree2(frequencyStream);
+	tree2.printTree();
+	tree2.printCodes();
 
-	//tree2.compressFile("BigO.bin", "Bigo.txt");
-	//tree2.printCodes();
-	//tree2.uncompressFile("BigO.bin", "BigORebuilt.txt");
-	//tree2.printTree();
-	//tree2.printCodes();
+	tree2.compressFile("BigO.bin", "Bigo.txt");
+	tree2.printCodes();
+	tree2.uncompressFile("BigO.bin", "BigORebuilt.txt");
+	tree2.printTree();
+	tree2.printCodes();
 
 	////Test 4
 	//cout << "\n\nTest 4\n";
