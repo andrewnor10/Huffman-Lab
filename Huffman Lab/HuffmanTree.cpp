@@ -341,7 +341,14 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 
 void HuffmanTree::uncompressFile(string compressedFileName,
 	string uncompressedToFileName) {
-	// need to write code	
+	// need to write code
+	unordered_map<char, string> uncompressedCodes;
+
+	ifstream compressedFile(compressedFileName, ios::in | ios::binary);
+	ofstream uncompressedFile(uncompressedToFileName);
+	ostringstream input;
+	input << compressedFile.rdbuf();
+	
 
 	// NOTE: when opening the compressedFile, you need to open in 
 	//  binary mode for reading..hmmm..why is that?
@@ -353,21 +360,23 @@ void HuffmanTree::compressFile(string compressToFileName,
 	ifstream uncompressedFile(uncompressedFileName);
 	ofstream compressedFile(compressToFileName, ios::out | ios::binary);
 	ostringstream ss;
-	ostringstream num2;
+
 	// Write key value pairs first to the compressed file
 	// Start with number of chars, then a colon to seperate
-	compressedFile << 
-	for (unordered_map<char, string>::iterator it = codeLookup.begin(); it != codeLookup.end(); ++it)
-	{
-		
-		compressedFile << (it->first);
-		compressedFile << (it->second);
-		compressedFile << ':';
 	
+		for (unordered_map<char, string>::iterator it = codeLookup.begin(); it != codeLookup.end(); ++it)
+		{
 
+			compressedFile << (it->first);
+			compressedFile << (it->second);
+			compressedFile << '~'; // Seperator character
+
+		}
 	ss << uncompressedFile.rdbuf(); // Put the filestream buffer into the string stream
 	const string& compressText = ss.str(); // make a const string out of the string stream
 	vector<char> encoded = encode(compressText); // Encode the filestream into a char vector 
+
+
 	//Write the encoded string Reinterpret cast to make the chars const, write to the amount of room the num of chars in encoded is
 	compressedFile.write(reinterpret_cast<const char*>(&encoded[0]), encoded.size() * sizeof(char)); 
 	
