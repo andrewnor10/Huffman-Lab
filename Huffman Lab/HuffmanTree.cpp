@@ -346,9 +346,28 @@ void HuffmanTree::uncompressFile(string compressedFileName,
 
 	ifstream compressedFile(compressedFileName, ios::in | ios::binary);
 	ofstream uncompressedFile(uncompressedToFileName);
-	ostringstream input;
+	stringstream input;
 	input << compressedFile.rdbuf();
+	string temp;
 	
+	char mapKey;
+	unordered_map<char, string> decryptedCodes;
+
+	
+	while (getline(input, temp, '~'))
+	{
+		string mapCode;
+		mapKey = temp[0];
+		for (string::iterator it = ++temp.begin(); it != temp.end(); it++)
+		{
+			
+			mapCode.push_back(*it);
+		}
+		decryptedCodes[mapKey] = mapCode;
+	}
+
+
+
 
 	// NOTE: when opening the compressedFile, you need to open in 
 	//  binary mode for reading..hmmm..why is that?
