@@ -353,9 +353,13 @@ void HuffmanTree::uncompressFile(string compressedFileName,
 	char mapKey;
 	unordered_map<char, string> decryptedCodes;
 
-	
+	// first data will be unique character list and go through that many
 	while (getline(input, temp, '~'))
 	{
+		if ((temp.find('~') == string::npos))
+		{
+			break;
+		}
 		string mapCode;
 		mapKey = temp[0];
 		for (string::iterator it = ++temp.begin(); it != temp.end(); it++)
