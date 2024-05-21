@@ -43,6 +43,7 @@ private:
 
 	BinaryNode *root = nullptr;
 	char EOFCharacter = 0;
+	int numCodes = 0;
 	unordered_map<char, string> codeLookup; // can be used to store codes after tree is
 											//  created...this is faster than tracing
 											//  down the tree each time when encoding a

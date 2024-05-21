@@ -129,6 +129,7 @@ void HuffmanTree::saveTree(BinaryNode* current, string code)
 		if (current->element.size() == 1 && codeLookup.find(current->element.front()) == codeLookup.end())
 		{
 			codeLookup[current->element.front()] = code;
+			numCodes++;
 		}
 		saveTree(current->right, code + "1"); // Right branch
 
@@ -264,12 +265,12 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 
 	vector<char> codes;
 	BinaryNode* current = root;
-	printBinary(encodedBytes);
+
 	for (int i = 0; i < encodedBytes.size(); i++)
 	{
 		current = root;
 		byte = encodedBytes.at(i);
-		printBits(encodedBytes[i]);
+	
 		for (int bitCount = 0; bitCount <= 8 && current != nullptr; bitCount++)
 		{
 
@@ -290,8 +291,7 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 
 		
 	}
-	cout << endl;
-	printBinary(encodedBytes);
+
 	return decoded;
 }
 
@@ -341,25 +341,25 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 
 void HuffmanTree::uncompressFile(string compressedFileName,
 	string uncompressedToFileName) {
-	// need to write code
 	unordered_map<char, string> uncompressedCodes;
 
 	ifstream compressedFile(compressedFileName, ios::in | ios::binary);
 	ofstream uncompressedFile(uncompressedToFileName);
 	stringstream input;
 	input << compressedFile.rdbuf();
-	string temp;
 	
+	string temp;
+	int uniqueChars;
 	char mapKey;
 	unordered_map<char, string> decryptedCodes;
+	
+	getline(input, temp, '~');
+	uniqueChars = stoi(temp);
 
-	// first data will be unique character list and go through that many
-	while (getline(input, temp, '~'))
-	{
-		if ((temp.find('~') == string::npos))
-		{
-			break;
-		}
+	// Build table of codes
+	for (int i = 0; i < uniqueChars; i++)
+	{	getline(input, temp, '~');
+
 		string mapCode;
 		mapKey = temp[0];
 		for (string::iterator it = ++temp.begin(); it != temp.end(); it++)
@@ -369,8 +369,16 @@ void HuffmanTree::uncompressFile(string compressedFileName,
 		}
 		decryptedCodes[mapKey] = mapCode;
 	}
+	
+	codeLookup = decryptedCodes;
+	temp = input.str();
+	vector<char> charsToDecode(temp.begin(), temp.end());
+	temp = decode(charsToDecode);
+	cout << temp;
+	system("pause");
 
-
+	// After we have the key
+	
 
 
 	// NOTE: when opening the compressedFile, you need to open in 
@@ -386,7 +394,7 @@ void HuffmanTree::compressFile(string compressToFileName,
 
 	// Write key value pairs first to the compressed file
 	// Start with number of chars, then a colon to seperate
-	
+	compressedFile << numCodes << '~';
 		for (unordered_map<char, string>::iterator it = codeLookup.begin(); it != codeLookup.end(); ++it)
 		{
 
