@@ -270,7 +270,10 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 	{
 		current = root;
 		byte = encodedBytes.at(i);
-	
+		if (encodedBytes[i] == EOFCharacter)
+		{
+			return decoded;
+		}
 		for (int bitCount = 0; bitCount <= 8 && current != nullptr; bitCount++)
 		{
 
@@ -345,36 +348,44 @@ void HuffmanTree::uncompressFile(string compressedFileName,
 
 	ifstream compressedFile(compressedFileName, ios::in | ios::binary);
 	ofstream uncompressedFile(uncompressedToFileName);
-	stringstream input;
+	ostringstream input;
 	input << compressedFile.rdbuf();
-	
+	const string s = input.str();
+	vector<char> vec(s.begin(), s.end());
 	string temp;
 	int uniqueChars;
+	int keyPos = 0;
 	char mapKey;
 	unordered_map<char, string> decryptedCodes;
-	
-	getline(input, temp, '~');
+	for (int i = 0; vec[i] != '~'; i++) // Get unqiue chars number
+	{
+		temp.push_back(vec[i]);
+		keyPos = i;
+	}
+	keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
 	uniqueChars = stoi(temp);
 
 	// Build table of codes
-	for (int i = 0; i < uniqueChars; i++)
-	{	getline(input, temp, '~');
-
+	
+	for (int i = 0; decryptedCodes.size() < uniqueChars; i++)
+	{	// getline(input, temp, '~');
 		string mapCode;
-		mapKey = temp[0];
-		for (string::iterator it = ++temp.begin(); it != temp.end(); it++)
+		mapKey = vec[keyPos];
+		for (; vec[keyPos + 1] != '~'; keyPos++)
 		{
+			mapCode.push_back(vec[keyPos + 1]);
 			
-			mapCode.push_back(*it);
 		}
+		keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
 		decryptedCodes[mapKey] = mapCode;
 	}
 	
 	codeLookup = decryptedCodes;
-	temp = input.str();
-	vector<char> charsToDecode(temp.begin(), temp.end());
-	temp = decode(charsToDecode);
+	vector<char> dataOnly(vec.begin() + keyPos, vec.end());
+	temp = decode(dataOnly);
 	cout << temp;
+	// 
+	
 	system("pause");
 
 	// After we have the key
