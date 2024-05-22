@@ -274,7 +274,7 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 		{
 			return decoded;
 		}
-		for (int bitCount = 0; bitCount <= 8 && current != nullptr; bitCount++)
+		for (int bitCount = 0; bitCount < 8 && current != nullptr; bitCount++)
 		{
 
 			if (current->element.size() == 1)
