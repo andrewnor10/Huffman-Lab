@@ -268,7 +268,7 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 
 	for (int i = 0; i < encodedBytes.size(); i++)
 	{
-		current = root;
+		
 		byte = encodedBytes.at(i);
 		if (encodedBytes[i] == EOFCharacter)
 		{
