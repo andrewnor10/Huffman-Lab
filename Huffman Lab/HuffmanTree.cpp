@@ -279,7 +279,13 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 
 			if (current->element.size() == 1)
 			{
+				cout << "EncodedBytes bits: ";
+				printBits(encodedBytes[i]);
+				cout << " Current Element bits: ";
+				printBits(current->element.front());
+				cout << endl;
 				decoded += current->element;
+				cout << current->element;
 				current = root;
 			}
 			if (getBit(byte, bitCount) == 0)
@@ -325,7 +331,7 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 			{
 				encoded.push_back(byte);
 				printBits(byte, cout);
-				
+				cout << endl;
 				bitCounter = 0;
 				byte = 0;
 				

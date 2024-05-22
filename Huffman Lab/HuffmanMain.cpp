@@ -60,7 +60,7 @@ int main() {
 	//         (some of the functions may need to call other private functions)
 
 	//Test 1        
-	cout << "\n\nTest 1\n";
+/*	cout << "\n\nTest 1\n";
 	cout << "\n\nBuilding the tree from: HHHHEELLLLLLLOO WOOOOORRLLLLLLDP\n";
 	HuffmanTree tree("HHHHEELLLLLLLOO WOOOOORRLLLLLLDP");
 	
@@ -85,17 +85,17 @@ int main() {
 	cout << tree.decode(encoded) << ":" << endl;
 	system("pause");  // LAB 3: Should run up to here with the above functions working with chars '1' and '0' 
 						//			instead of making the changes at the binary level
-
+*/
 	//Test 3
 	cout << "\n\nTest 3\n";
-	std::ifstream frequencyStream("Bigo.txt");
+	std::ifstream frequencyStream("quick.txt");
 	HuffmanTree tree2(frequencyStream);
 	tree2.printTree();
 	tree2.printCodes();
 
-	tree2.compressFile("BigO.bin", "Bigo.txt");
+	tree2.compressFile("BigO.bin", "quick.txt");
 	tree2.printCodes();
-	tree2.uncompressFile("BigO.bin", "BigORebuilt.txt");
+	tree2.uncompressFile("BigO.bin", "quickRebuilt.txt");
 	tree2.printTree();
 	tree2.printCodes();
 
