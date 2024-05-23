@@ -150,13 +150,52 @@ void HuffmanTree::saveTree(std::ostream& compressedFileStream)
 void HuffmanTree::rebuildTree(BinaryNode* node, string element, string codedRoute)
 {
 	// need to write code
-
+	if (node == nullptr)
+	{
+		node = new BinaryNode();
+	}
 }
 
 void HuffmanTree::rebuildTree(ifstream& compressedFile) {
 	// read info from file
 	// use info to build tree
+	
+	unordered_map<char, string> uncompressedCodes;
 
+	ostringstream input;
+	input << compressedFile.rdbuf();
+	const string s = input.str();
+	vector<char> vec(s.begin(), s.end());
+	string temp;
+	int uniqueChars;
+	int keyPos = 0;
+	char mapKey;
+	
+	unordered_map<char, string> decryptedCodes;
+	for (int i = 0; vec[i] != '~'; i++) // Get unqiue chars number
+	{
+		temp.push_back(vec[i]);
+		keyPos = i;
+	}
+	keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
+	uniqueChars = stoi(temp);
+
+	// Build table of codes
+
+	for (int i = 0; decryptedCodes.size() < uniqueChars; i++)
+	{	// getline(input, temp, '~');
+		string mapCode;
+		mapKey = vec[keyPos];
+		for (; vec[keyPos + 1] != '~'; keyPos++)
+		{
+			mapCode.push_back(vec[keyPos + 1]);
+
+		}
+		keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
+		decryptedCodes[mapKey] = mapCode;
+	}
+	codeLookup = decryptedCodes;
+	rebuildTree(root, string(), string());
 	// need to write code
 	// calls recursive function
 }
@@ -352,47 +391,18 @@ void HuffmanTree::uncompressFile(string compressedFileName,
 	string uncompressedToFileName) {
 	unordered_map<char, string> uncompressedCodes;
 
-	ifstream compressedFile(compressedFileName, ios::in | ios::binary);
+	ifstream compressedFile(compressedFileName, ios::out | ios::binary);
 	ofstream uncompressedFile(uncompressedToFileName);
-	ostringstream input;
-	input << compressedFile.rdbuf();
-	const string s = input.str();
-	vector<char> vec(s.begin(), s.end());
-	string temp;
-	int uniqueChars;
-	int keyPos = 0;
-	char mapKey;
-	unordered_map<char, string> decryptedCodes;
-	for (int i = 0; vec[i] != '~'; i++) // Get unqiue chars number
-	{
-		temp.push_back(vec[i]);
-		keyPos = i;
-	}
-	keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
-	uniqueChars = stoi(temp);
-
-	// Build table of codes
 	
-	for (int i = 0; decryptedCodes.size() < uniqueChars; i++)
-	{	// getline(input, temp, '~');
-		string mapCode;
-		mapKey = vec[keyPos];
-		for (; vec[keyPos + 1] != '~'; keyPos++)
-		{
-			mapCode.push_back(vec[keyPos + 1]);
-			
-		}
-		keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
-		decryptedCodes[mapKey] = mapCode;
-	}
+	rebuildTree(compressedFile);
 	
-	codeLookup = decryptedCodes;
-	vector<char> dataOnly(vec.begin() + keyPos, vec.end());
-	temp = decode(dataOnly);
-	cout << temp;
+	
+	// vector<char> dataOnly(vec.begin() + keyPos, vec.end());
+//	uncompressedFile << decode(dataOnly);
+	
 	// 
 	
-	system("pause");
+	
 
 	// After we have the key
 	
