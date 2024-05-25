@@ -94,6 +94,13 @@ string HuffmanTree::getCode(char letter) const
 
 void HuffmanTree::makeEmpty(BinaryNode*& t) {
 	// need to write code
+	if (t != nullptr)
+	{
+		makeEmpty(t->left);
+		makeEmpty(t->right);
+		delete t;
+		t = nullptr;
+	}
 }
 
 void HuffmanTree::printTree(BinaryNode* node, std::ostream& out) const
@@ -147,57 +154,84 @@ void HuffmanTree::saveTree(std::ostream& compressedFileStream)
 }
 
 
-void HuffmanTree::rebuildTree(BinaryNode* node, string element, string codedRoute)
+void HuffmanTree::rebuildTree(BinaryNode*& node, string element, string codedRoute)
 {
-	// need to write code
+	// Rebuild a huffman tree from a file
 	if (node == nullptr)
 	{
-		node = new BinaryNode();
+		node = new BinaryNode("empty");
 	}
+	if (codedRoute.size() == 0)
+	{
+		node->element = element;
+	}
+	else
+	{
+		if (codedRoute[0] == '0')
+		{
+			rebuildTree(node->left, element, codedRoute.substr(1));
+		}
+		else
+		{
+			rebuildTree(node->right, element, codedRoute.substr(1));
+		}
+	}
+	
+
+
 }
 
 void HuffmanTree::rebuildTree(ifstream& compressedFile) {
-	// read info from file
-	// use info to build tree
-	
-	unordered_map<char, string> uncompressedCodes;
+    // read info from file
+    // use info to build tree
+	makeEmpty(root);
+    unordered_map<char, string> uncompressedCodes;
 
-	ostringstream input;
-	input << compressedFile.rdbuf();
-	const string s = input.str();
-	vector<char> vec(s.begin(), s.end());
-	string temp;
-	int uniqueChars;
-	int keyPos = 0;
-	char mapKey;
+    ostringstream input;
+    input << compressedFile.rdbuf();
+    const string s = input.str();
+    vector<char> vec(s.begin(), s.end());
+    string temp;
+    int uniqueChars;
+    int keyPos = 0;
+    char mapKey;
+
+
+    unordered_map<char, string> decryptedCodes;
+    for (int i = 0; vec[i] != '~'; i++) // Get unqiue chars number
+    {
+        temp.push_back(vec[i]);
+        keyPos = i;
+    }
+    keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
+    uniqueChars = stoi(temp);
+
+    // Build table of codes
+
+    for (int i = 0; decryptedCodes.size() < uniqueChars; i++)
+    {   // getline(input, temp, '~');
+        string mapCode;
+        mapKey = vec[keyPos];
+        for (; vec[keyPos + 1] != '~'; keyPos++)
+        {
+            mapCode.push_back(vec[keyPos + 1]);
+
+        }
+        keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
+        decryptedCodes[mapKey] = mapCode;
+    }
+    codeLookup = decryptedCodes;
+    
+    // Remove the key from the ifstream
+	compressedFile.seekg(keyPos, ios::beg);
 	
-	unordered_map<char, string> decryptedCodes;
-	for (int i = 0; vec[i] != '~'; i++) // Get unqiue chars number
+
+
+	for (unordered_map<char, string>::iterator it = codeLookup.begin(); it != codeLookup.end(); ++it)
 	{
-		temp.push_back(vec[i]);
-		keyPos = i;
+		rebuildTree(root, string(1, it->first), it->second);
 	}
-	keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
-	uniqueChars = stoi(temp);
 
-	// Build table of codes
-
-	for (int i = 0; decryptedCodes.size() < uniqueChars; i++)
-	{	// getline(input, temp, '~');
-		string mapCode;
-		mapKey = vec[keyPos];
-		for (; vec[keyPos + 1] != '~'; keyPos++)
-		{
-			mapCode.push_back(vec[keyPos + 1]);
-
-		}
-		keyPos += 2; // +1 sets pos to the tilda, +2 sets pos to character after tilda
-		decryptedCodes[mapKey] = mapCode;
-	}
-	codeLookup = decryptedCodes;
-	rebuildTree(root, string(), string());
-	// need to write code
-	// calls recursive function
 }
 
 HuffmanTree::BinaryNode* HuffmanTree::buildTree(string frequencyText) {
@@ -296,12 +330,13 @@ void HuffmanTree::makeEmpty()
 {
 	// need to write code
 	// calls recursive function	
+	makeEmpty(root);
 }
 
 string HuffmanTree::decode(vector<char> encodedBytes) {
 	string decoded;
 	char byte = 0;
-
+	int bitCounter = 0;
 	vector<char> codes;
 	BinaryNode* current = root;
 
@@ -309,20 +344,29 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 	{
 		
 		byte = encodedBytes.at(i);
-		if (encodedBytes[i] == EOFCharacter)
-		{
-			return decoded;
-		}
+      
+          
+          if (byte == EOFCharacter)
+            {
+             // Check if there are more bytes after the EOFCharacter
+             if (i + 1 < encodedBytes.size())
+             {
+                // Continue decoding the remaining bytes
+                continue;
+             }
+             else
+             {
+               // Reached the end of the encoded bytes, return the decoded string
+               return decoded;
+             }
+          }
+            // Rest of the decoding logic...
+       
 		for (int bitCount = 0; bitCount < 8 && current != nullptr; bitCount++)
 		{
 
 			if (current->element.size() == 1)
 			{
-				cout << "EncodedBytes bits: ";
-				printBits(encodedBytes[i]);
-				cout << " Current Element bits: ";
-				printBits(current->element.front());
-				cout << endl;
 				decoded += current->element;
 				cout << current->element;
 				current = root;
@@ -335,11 +379,12 @@ string HuffmanTree::decode(vector<char> encodedBytes) {
 			{
 				current = current->right;
 			}
+		
 		}
 
 		
 	}
-
+	
 	return decoded;
 }
 
@@ -369,7 +414,6 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 			if (bitCounter == 8)
 			{
 				encoded.push_back(byte);
-				printBits(byte, cout);
 				cout << endl;
 				bitCounter = 0;
 				byte = 0;
@@ -389,29 +433,23 @@ vector<char> HuffmanTree::encode(string stringToEncode)
 
 void HuffmanTree::uncompressFile(string compressedFileName,
 	string uncompressedToFileName) {
-	unordered_map<char, string> uncompressedCodes;
 
 	ifstream compressedFile(compressedFileName, ios::out | ios::binary);
-	ofstream uncompressedFile(uncompressedToFileName);
-	
+	ofstream uncompressedFile(uncompressedToFileName, ios::in);
+	ostringstream input;
+
 	rebuildTree(compressedFile);
-	
-	
-	// vector<char> dataOnly(vec.begin() + keyPos, vec.end());
-//	uncompressedFile << decode(dataOnly);
-	
-	// 
-	
-	
-
-	// After we have the key
-	
+	input << compressedFile.rdbuf();
+	const string s = input.str();
+	vector<char> vec(s.begin(), s.end());
+	string decoded = decode(vec);
 
 
-	// NOTE: when opening the compressedFile, you need to open in 
-	//  binary mode for reading..hmmm..why is that?
+	// Write data to the file
+	uncompressedFile << decoded;
+	compressedFile.close();
+	uncompressedFile.close();
 }
-
 void HuffmanTree::compressFile(string compressToFileName,
 	string uncompressedFileName, bool buildNewTree) {
 	// need to write code	

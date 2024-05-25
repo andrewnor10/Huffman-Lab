@@ -56,7 +56,7 @@ private:
 	void saveTree(BinaryNode * current, string code);
 	void saveTree(std::ostream & out);
 	
-	void rebuildTree(BinaryNode * node, string element, string codedRoute);
+	void rebuildTree(BinaryNode *& node, string element, string codedRoute);
 	void rebuildTree(ifstream & file);
 
 	BinaryNode * buildTree(string frequencyText);

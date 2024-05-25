@@ -32,10 +32,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HuffmanTree.h">
+    <ClInclude Include="HuffmanTreeInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HuffmanTreeInterface.h">
+    <ClInclude Include="HuffmanTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

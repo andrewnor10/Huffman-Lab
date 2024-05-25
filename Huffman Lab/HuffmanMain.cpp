@@ -88,29 +88,30 @@ int main() {
 */
 	//Test 3
 	cout << "\n\nTest 3\n";
-	std::ifstream frequencyStream("quick.txt");
+	std::ifstream frequencyStream("BigO.txt");
 	HuffmanTree tree2(frequencyStream);
-	tree2.printTree();
-	tree2.printCodes();
+//	tree2.printTree();
+//	tree2.printCodes();
 
-	tree2.compressFile("BigO.bin", "quick.txt");
-	tree2.printCodes();
-	tree2.uncompressFile("BigO.bin", "quickRebuilt.txt");
-	tree2.printTree();
-	tree2.printCodes();
+	tree2.compressFile("BigO.bin", "BigO.txt");
+//	tree2.printCodes();
+	tree2.uncompressFile("BigO.bin", "BigORebuilt.txt");
+// 	tree2.printTree();
+//	tree2.printCodes();
 
-	////Test 4
-	//cout << "\n\nTest 4\n";
-	//std::ifstream frequencyStream2("20000leagues.txt");
-	//HuffmanTree tree3(frequencyStream2);
-	//tree3.printTree();
-	//tree3.printCodes();
-	//cout << "Code L :" << tree3.getCode('L') << endl;
-	//tree3.compressFile("20000leaguesComp.bin" ,"20000leagues.txt",true);
-	//tree3.uncompressFile("20000leaguesComp.bin", "20000leaguesRebuilt.txt");
-	//tree3.printTree();
-	//tree3.printCodes();
-
+	//Test 4
+	
+	cout << "\n\nTest 4\n";
+	std::ifstream frequencyStream2("20000leagues.txt");
+	HuffmanTree tree3(frequencyStream2);
+	// tree3.printTree();
+	// tree3.printCodes();
+	cout << "Code L :" << tree3.getCode('L') << endl;
+	tree3.compressFile("20000leaguesComp.bin" ,"20000leagues.txt",true);
+	tree3.uncompressFile("20000leaguesComp.bin", "20000leaguesRebuilt.txt");
+	tree3.printTree();
+	tree3.printCodes();
+	
 	// Try Other Files
 
 	//// read in text file create string - might be useful
